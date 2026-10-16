@@ -64,18 +64,3 @@ Run the forward path on synthetic inputs with:
 ```bash
 python -m final_kigwn_minimal
 ```
-
-## Citation
-
-If you use this code, please cite:
-
-```bibtex
-@article{chu2026kigwn,
-  title   = {Knowledge-Informed Graph Neural Networks for Spatiotemporal
-             Hydraulic State Prediction in Urban Drainage Systems},
-  author  = {Chu, Wenhao and Hu, Yuqian and Jin, Chaosen and Zhang, Chunxiao
-             and Di, Suchuang and Li, Rongrong and Wang, Tianbao and Li, Heng},
-  journal = {Water Research},
-  year    = {2026}
-}
-```
