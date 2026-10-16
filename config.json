@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "model": "KIGWN",
+  "architecture": {
+    "n_nodes": 392,
+    "in_channels": 9,
+    "c_res": 64,
+    "c_skip": 128,
+    "diffusion_steps": 2,
+    "dilations": [1, 2, 4, 8],
+    "use_adaptive": true,
+    "use_physics_embedding": true,
+    "use_hurdle": true,
+    "n_static_supports": 2,
+    "physics_embed_dim": 32,
+    "adaptive_rank": 16,
+    "window_steps": 6
+  },
+  "input": {
+    "window_steps": 6,
+    "horizon_steps": 1,
+    "layout": "[batch, channels, nodes, window]",
+    "feature_order": [
+      "rainfall",
+      "cumulative_rainfall",
+      "area",
+      "imperviousness",
+      "width",
+      "slope",
+      "invert_elevation",
+      "max_depth",
+      "node_type"
+    ],
+    "normalization": {
+      "rainfall": "log1p_minmax",
+      "cumulative_rainfall": "minmax",
+      "area": "log1p_minmax",
+      "imperviousness": "log1p_minmax",
+      "width": "log1p_minmax",
+      "slope": "log1p_minmax",
+      "invert_elevation": "log1p_minmax",
+      "max_depth": "log1p_minmax",
+      "node_type": "none_0_1"
+    }
+  },
+  "targets": {
+    "overflow": {
+      "unit": "m3/s",
+      "normalization": "log1p_minmax"
+    },
+    "hydraulic_head": {
+      "unit": "m",
+      "normalization": "minmax"
+    }
+  },
+  "physics_features": [
+    "fill_ratio",
+    "safety_margin",
+    "orifice_exceedance_sqrt",
+    "weir_exceedance_power_1_5"
+  ],
+  "views": ["topology", "rbf", "adaptive"],
+  "training": {
+    "batch_size": 512,
+    "epochs": 500,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0005,
+    "gradient_clip_norm": 1.0,
+    "lr_scheduler": {
+      "name": "ReduceLROnPlateau",
+      "factor": 0.5,
+      "patience": 15
+    },
+    "early_stopping_patience": 30,
+    "focal_loss": {
+      "alpha": 0.25,
+      "gamma": 2.0
+    }
+  },
+  "runtime": {
+    "pytorch": "2.6.0"
+  }
+}
